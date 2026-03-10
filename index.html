@@ -5,137 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supabase Status Monitor</title>
     <style>
-        :root {
-            --bg: #eef2f7;
-            --card: #ffffff;
-            --text: #2d3748;
-            --muted: #8896a5;
-            --border: #e2e8f0;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --radius: 16px;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'Nunito', sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7f9;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 24px 16px;
+            padding: 20px;
             gap: 16px;
         }
 
         .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 22px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
             width: 100%;
-            max-width: 440px;
+            max-width: 450px;
         }
 
-        .card h3 {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 14px;
-            letter-spacing: -0.3px;
-        }
+        h3 { margin: 0 0 15px 0; font-size: 18px; color: #333; }
 
-        /* Profile info */
         #myInfo {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 14px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
 
-        #myInfo span {
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* Status grid */
         .grid-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
 
-        .status-btn {
+        button {
             border: none;
-            padding: 13px 10px;
-            border-radius: 12px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 700;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
             font-size: 14px;
             cursor: pointer;
             color: white;
-            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
+            gap: 8px;
         }
 
-        .status-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
-        .status-btn:active { transform: translateY(0); box-shadow: none; opacity: 0.9; }
-        .status-btn.active-status { outline: 3px solid rgba(0,0,0,0.25); outline-offset: 2px; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
 
-        .btn-study  { background: linear-gradient(135deg, #38d96a, #28a745); }
-        .btn-coffee { background: linear-gradient(135deg, #ffd454, #ffc107); color: #5a3e00; }
-        .btn-game   { background: linear-gradient(135deg, #3dd5f3, #17a2b8); }
-        .btn-home   { background: linear-gradient(135deg, #adb5bd, #6c757d); }
+        .btn-study  { background: #28a745; }
+        .btn-coffee { background: #ffc107; color: #000; }
+        .btn-game   { background: #17a2b8; }
+        .btn-home   { background: #6c757d; }
 
-        /* Group list */
         .user-item {
             display: flex;
             align-items: center;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
             gap: 12px;
         }
         .user-item:last-child { border-bottom: none; }
 
         .status-dot {
-            width: 11px;
-            height: 11px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             flex-shrink: 0;
-            box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
         }
 
-        .user-details strong {
-            display: block;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-        }
+        .user-details strong { display: block; font-size: 15px; color: #333; }
+        .user-details span   { font-size: 13px; color: #777; }
 
-        .user-details span {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 600;
-        }
-
-        /* ---- Username edit section ---- */
-        .edit-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .edit-section label {
+        .edit-label {
             font-size: 12px;
             font-weight: 700;
-            color: var(--muted);
+            color: #8896a5;
             text-transform: uppercase;
             letter-spacing: 0.6px;
+            margin-bottom: 8px;
+            display: block;
         }
 
         .input-row {
@@ -143,54 +97,38 @@
             gap: 8px;
         }
 
-        .edit-section input {
+        .input-row input {
             flex: 1;
-            border: 2px solid var(--border);
-            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
             padding: 10px 14px;
-            font-family: 'Nunito', sans-serif;
             font-size: 14px;
             font-weight: 600;
-            color: var(--text);
+            color: #333;
             outline: none;
             transition: border-color 0.2s;
         }
 
-        .edit-section input:focus {
-            border-color: #667eea;
-        }
+        .input-row input:focus { border-color: #667eea; }
 
         .btn-save {
-            border: none;
-            background: linear-gradient(135deg, #667eea, #5a67d8);
+            background: #667eea;
             color: white;
             padding: 10px 18px;
-            border-radius: 10px;
-            font-family: 'Nunito', sans-serif;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 14px;
-            cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
             white-space: nowrap;
         }
 
-        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
-        .btn-save:active { transform: translateY(0); }
+        .btn-save:hover { opacity: 0.9; }
 
         .save-msg {
             font-size: 12px;
             font-weight: 700;
-            color: #28a745;
             min-height: 16px;
+            margin-top: 8px;
             transition: opacity 0.3s;
-        }
-
-        #groupList:empty::after {
-            content: 'Загрузка...';
-            font-size: 13px;
-            color: var(--muted);
-            display: block;
-            padding: 8px 0;
         }
     </style>
 </head>
@@ -199,11 +137,11 @@
     <div class="card">
         <h3>Мой профиль</h3>
         <p id="myInfo">Загрузка...</p>
-        <div class="controls">
-            <button class="btn-study" onclick="changeStatus('📚 Учусь', '#28a745')">📚 Учусь</button>
+        <div class="grid-buttons">
+            <button class="btn-study"  onclick="changeStatus('📚 Учусь', '#28a745')">📚 Учусь</button>
             <button class="btn-coffee" onclick="changeStatus('☕ Кофе-брейк', '#ffc107')">☕ Кофе</button>
-            <button class="btn-game" onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 В игре</button>
-            <button class="btn-home" onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 Дома</button>
+            <button class="btn-game"   onclick="changeStatus('🎮 В игре', '#17a2b8')">🎮 В игре</button>
+            <button class="btn-home"   onclick="changeStatus('🏠 Дома', '#6c757d')">🏠 Дома</button>
         </div>
     </div>
 
@@ -212,19 +150,29 @@
         <div id="groupList">Поиск студентов...</div>
     </div>
 
+    <div class="card">
+        <h3>⚙️ Настройки</h3>
+        <label class="edit-label">Изменить имя</label>
+        <div class="input-row">
+            <input type="text" id="usernameInput" placeholder="Введите новое имя..." maxlength="30" />
+            <button class="btn-save" onclick="saveUsername()">Сохранить</button>
+        </div>
+        <div class="save-msg" id="saveMsg"></div>
+    </div>
+
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
         const URL = 'https://uskgwslaspamdwcrower.supabase.co';
         const KEY = 'sb_publishable_MxA6YiduUA0NeVn6Mcr38g_EtLtqABO';
-        const supabase = createClient(URL, KEY);
+        const MY_ID = '3e08bbbb-7986-44fa-a52d-3dc7941a471c';
 
-        const MY_ID = '3e08bbbb-7986-44fa-a52d-3dc7941a471c'; 
+        const supabase = createClient(URL, KEY);
 
         window.changeStatus = async (text, color) => {
             const { error } = await supabase
                 .from('profiles')
-                .update({ status: text })
+                .update({ status: text, color: color })
                 .eq('id', MY_ID);
 
             if (error) {
@@ -234,6 +182,33 @@
                 fetchGroup();
             }
         };
+
+        window.saveUsername = async () => {
+            const newName = document.getElementById('usernameInput').value.trim();
+            if (!newName) { showMsg('Введите имя!', '#e53e3e'); return; }
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ username: newName })
+                .eq('id', MY_ID);
+
+            if (error) {
+                console.error(error);
+                showMsg('Ошибка! Проверьте RLS.', '#e53e3e');
+            } else {
+                showMsg('✅ Имя обновлено!', '#28a745');
+                document.getElementById('usernameInput').value = '';
+                fetchGroup();
+            }
+        };
+
+        function showMsg(text, color) {
+            const el = document.getElementById('saveMsg');
+            el.textContent = text;
+            el.style.color = color;
+            el.style.opacity = '1';
+            setTimeout(() => { el.style.opacity = '0'; }, 3000);
+        }
 
         async function fetchGroup() {
             const { data, error } = await supabase
@@ -247,9 +222,9 @@
             list.innerHTML = data.map(user => `
                 <div class="user-item">
                     <div class="status-dot" style="background: ${user.color || '#ccc'}"></div>
-                    <div style="flex-grow: 1;">
-                        <strong>${user.username}</strong><br>
-                        <small style="color: #666;">${user.status || 'Статус не задан'}</small>
+                    <div class="user-details">
+                        <strong>${user.username}</strong>
+                        <span>${user.status || 'Статус не задан'}</span>
                     </div>
                 </div>
             `).join('');
@@ -259,8 +234,11 @@
         }
 
         fetchGroup();
-
         setInterval(fetchGroup, 5000);
+
+        document.getElementById('usernameInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') window.saveUsername();
+        });
     </script>
 </body>
 </html>
