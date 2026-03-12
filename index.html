@@ -389,15 +389,21 @@
         async function onLogin(user) {
             currentUser = user;
 
-            // Upsert profile
-            await supabase.from('profiles').upsert({
-                id: user.id,
-                username: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Аноним',
-                status: '🟢 Онлайн',
-                color: '#4ade80'
-            }, { onConflict: 'id', ignoreDuplicates: true });
+            const { data: existing } = await supabase
+                .from('profiles')
+                .select('id')
+                .eq('id', user.id)
+                .maybeSingle();
 
-            // Show avatar
+            if (!existing) {
+                await supabase.from('profiles').insert({
+                    id: user.id,
+                    username: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Аноним',
+                    status: '🟢 Онлайн',
+                    color: '#4ade80'
+                });
+            }
+
             const avatarUrl = user.user_metadata?.avatar_url;
             if (avatarUrl) {
                 document.getElementById('avatarWrap').innerHTML =
