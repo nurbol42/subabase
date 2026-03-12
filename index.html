@@ -378,9 +378,10 @@
             }
 
             supabase.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'SIGNED_IN' && session?.user) {
+                if (event === 'SIGNED_IN' && session?.user && !currentUser) {
                     await onLogin(session.user);
                 } else if (event === 'SIGNED_OUT') {
+                    currentUser = null;
                     showScreen('auth');
                 }
             });
@@ -429,8 +430,12 @@
 
         // ── Logout ──
         window.logout = async () => {
-            await supabase.auth.signOut();
+            await supabase.auth.signOut({ scope: 'local' });
             currentUser = null;
+            // Clear all supabase tokens from storage
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('sb-')) localStorage.removeItem(key);
+            });
             showScreen('auth');
         };
 
