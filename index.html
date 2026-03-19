@@ -19,6 +19,9 @@
             --muted: #6b7a99;
             --danger: #f87171;
             --warn: #fbbf24;
+            --gold: #f59e0b;
+            --silver: #94a3b8;
+            --bronze: #cd7c3a;
         }
 
         body {
@@ -150,6 +153,96 @@
         }
         .profile-email { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
+        /* ── ACHIEVEMENTS ROW ── */
+        .achievements-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+            cursor: default;
+            position: relative;
+            transition: transform 0.15s;
+        }
+        .badge:hover { transform: scale(1.08); }
+
+        .badge-locked {
+            background: rgba(42, 51, 71, 0.4);
+            border-color: var(--border);
+            color: var(--muted);
+            opacity: 0.45;
+            filter: grayscale(1);
+        }
+
+        .badge-new {
+            animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes badgePop {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        /* badge colors */
+        .badge-early    { background: rgba(251,191,36,0.12);  border-color: rgba(251,191,36,0.4);  color: #fbbf24; }
+        .badge-marathon { background: rgba(74,222,128,0.12);  border-color: rgba(74,222,128,0.4);  color: #4ade80; }
+        .badge-activist { background: rgba(56,189,248,0.12);  border-color: rgba(56,189,248,0.4);  color: #38bdf8; }
+        .badge-owl      { background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.4); color: #a78bfa; }
+        .badge-streak   { background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.4); color: #f87171; }
+        .badge-speed    { background: rgba(251,146,60,0.12);  border-color: rgba(251,146,60,0.4);  color: #fb923c; }
+        .badge-social   { background: rgba(52,211,153,0.12);  border-color: rgba(52,211,153,0.4);  color: #34d399; }
+        .badge-champion { background: rgba(245,158,11,0.12);  border-color: rgba(245,158,11,0.4);  color: #f59e0b; }
+
+        /* toast notification */
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                       toastOut 0.3s ease 3.5s both;
+            max-width: 300px;
+        }
+
+        .toast-icon { font-size: 24px; flex-shrink: 0; }
+        .toast-body { flex: 1; }
+        .toast-title { font-weight: 700; font-size: 13px; color: var(--accent); }
+        .toast-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+        @keyframes toastIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to   { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateX(0); opacity: 1; }
+            to   { transform: translateX(120%); opacity: 0; }
+        }
+
         .grid-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -175,6 +268,63 @@
         .btn-status:hover { transform: translateY(-2px); filter: brightness(1.15); }
         .btn-status.active { border-color: var(--accent); background: rgba(74,222,128,0.08); }
 
+        /* ── LEADERBOARD ── */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+        .leaderboard-item:last-child { border-bottom: none; }
+
+        .lb-rank {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            width: 26px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .lb-rank-1 { color: var(--gold); }
+        .lb-rank-2 { color: var(--silver); }
+        .lb-rank-3 { color: var(--bronze); }
+        .lb-rank-n { color: var(--muted); }
+
+        .lb-medal { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+        .lb-info { flex: 1; }
+        .lb-name { font-weight: 600; font-size: 14px; }
+        .lb-sub  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+        .lb-score {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .lb-bar-wrap {
+            width: 100%;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 6px;
+        }
+        .lb-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transition: width 0.8s ease;
+        }
+
+        .lb-me-tag {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* ── USER LIST ── */
         .user-item {
             display: flex;
             align-items: center;
@@ -325,6 +475,33 @@
             margin-left: auto;
         }
 
+        /* ── STATS ROW ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .stat-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            text-align: center;
+        }
+        .stat-val {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-label {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+            letter-spacing: 0.3px;
+        }
+
         /* ── CHAT ── */
         .chat-messages {
             display: flex;
@@ -426,9 +603,23 @@
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* SQL hint */
+        .sql-hint {
+            background: rgba(56,189,248,0.07);
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .sql-hint b { color: var(--accent2); }
     </style>
 </head>
 <body>
+
+    <div id="toastContainer"></div>
 
     <div id="loadingScreen">
         <div class="spinner"></div>
@@ -452,19 +643,46 @@
 
     <div id="appScreen">
 
+        <!-- PROFILE -->
         <div class="card">
             <div class="card-title">Мой профиль</div>
             <div class="profile-header">
                 <div id="avatarWrap"><div class="avatar-placeholder">👤</div></div>
-                <div>
+                <div style="flex:1">
                     <div class="profile-name" id="profileName">Загрузка...</div>
                     <div class="profile-email" id="profileEmail"></div>
                 </div>
             </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-val" id="myTotalHours">0ч</div>
+                    <div class="stat-label">Всего учёбы</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="myMsgCount">0</div>
+                    <div class="stat-label">Сообщений</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="myScore">0</div>
+                    <div class="stat-label">Очков</div>
+                </div>
+            </div>
+
             <div class="my-study-time" id="myStudyTime">
                 <span class="my-study-time-label">⏱ Время учёбы:</span>
                 <span class="my-study-time-value" id="myStudyTimeValue">00:00:00</span>
             </div>
+
+            <!-- Achievements -->
+            <div style="margin-top:16px">
+                <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px;letter-spacing:0.5px;">🏅 МОИ ДОСТИЖЕНИЯ</div>
+                <div class="achievements-row" id="myBadges">
+                    <span style="font-size:12px;color:var(--muted)">Загрузка...</span>
+                </div>
+            </div>
+
             <div style="margin-top: 14px;">
                 <div class="grid-buttons">
                     <button class="btn-status" onclick="changeStatus('📚 Учусь', '#4ade80')">📚 Учусь</button>
@@ -475,6 +693,13 @@
             </div>
         </div>
 
+        <!-- LEADERBOARD -->
+        <div class="card">
+            <div class="card-title">🏆 Топ студентов</div>
+            <div id="leaderboardList" style="color:var(--muted);font-size:14px;">Загрузка...</div>
+        </div>
+
+        <!-- GROUP MONITOR -->
         <div class="card">
             <div class="card-title">👥 Монитор группы</div>
             <div id="groupList" style="color: var(--muted); font-size:14px;">Загрузка...</div>
@@ -492,6 +717,7 @@
             </div>
         </div>
 
+        <!-- SETTINGS -->
         <div class="card">
             <div class="card-title">⚙️ Настройки</div>
             <div class="input-row">
@@ -516,6 +742,81 @@
         let currentUser = null;
         let groupData = [];
         let myUsername = '';
+        let myProfile = null;
+
+        // ── ACHIEVEMENT DEFINITIONS ──
+        const ACHIEVEMENTS = [
+            {
+                id: 'early_bird',
+                emoji: '🌅',
+                label: 'Ранняя пташка',
+                desc: 'Войти до 8:00 утра',
+                cls: 'badge-early',
+                check: (p) => {
+                    const h = new Date().getHours();
+                    return h < 8;
+                }
+            },
+            {
+                id: 'night_owl',
+                emoji: '🦉',
+                label: 'Сова',
+                desc: 'Войти после 23:00',
+                cls: 'badge-owl',
+                check: (p) => {
+                    const h = new Date().getHours();
+                    return h >= 23;
+                }
+            },
+            {
+                id: 'marathon',
+                emoji: '🏃',
+                label: 'Марафонец',
+                desc: 'Проучиться 2+ часа за раз',
+                cls: 'badge-marathon',
+                check: (p) => (p.total_study_seconds || 0) >= 7200
+            },
+            {
+                id: 'activist',
+                emoji: '📣',
+                label: 'Активист',
+                desc: 'Написать 20 сообщений в чате',
+                cls: 'badge-activist',
+                check: (p) => (p.message_count || 0) >= 20
+            },
+            {
+                id: 'social',
+                emoji: '💬',
+                label: 'Болтун',
+                desc: 'Написать 5 сообщений в чате',
+                cls: 'badge-social',
+                check: (p) => (p.message_count || 0) >= 5
+            },
+            {
+                id: 'champion',
+                emoji: '👑',
+                label: 'Чемпион',
+                desc: 'Набрать 1000+ очков',
+                cls: 'badge-champion',
+                check: (p) => (p.score || 0) >= 1000
+            },
+            {
+                id: 'speed',
+                emoji: '⚡',
+                label: 'Молния',
+                desc: 'Проучиться 30+ минут за сессию',
+                cls: 'badge-speed',
+                check: (p) => (p.total_study_seconds || 0) >= 1800
+            },
+            {
+                id: 'streak3',
+                emoji: '🔥',
+                label: 'Стрик 3 дня',
+                desc: 'Заходить 3 дня подряд',
+                cls: 'badge-streak',
+                check: (p) => (p.login_streak || 0) >= 3
+            }
+        ];
 
         // ── Helpers ──
         function formatDuration(seconds) {
@@ -543,6 +844,29 @@
                 .replace(/"/g, '&quot;');
         }
 
+        function calcScore(profile) {
+            const studyHours = Math.floor((profile.total_study_seconds || 0) / 3600);
+            const msgs = profile.message_count || 0;
+            const badges = (profile.badges || []).length;
+            return studyHours * 100 + msgs * 5 + badges * 50;
+        }
+
+        // ── Toast ──
+        function showToast(emoji, title, sub) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">${emoji}</div>
+                <div class="toast-body">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-sub">${sub}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
         // ── Init ──
         async function init() {
             const { data: { session } } = await supabase.auth.getSession();
@@ -567,32 +891,72 @@
 
             const { data: existing } = await supabase
                 .from('profiles')
-                .select('id, username')
+                .select('*')
                 .eq('id', user.id)
                 .maybeSingle();
 
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+
             if (!existing) {
                 const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Аноним';
-                await supabase.from('profiles').insert({
+                const newProfile = {
                     id: user.id,
                     username: name,
                     status: '🟢 Онлайн',
                     color: '#4ade80',
                     is_online: true,
-                    study_started_at: null
-                });
+                    study_started_at: null,
+                    total_study_seconds: 0,
+                    message_count: 0,
+                    score: 0,
+                    badges: [],
+                    login_streak: 1,
+                    last_login_date: today
+                };
+                await supabase.from('profiles').insert(newProfile);
                 myUsername = name;
+                myProfile = newProfile;
             } else {
+                // Update streak
+                let streak = existing.login_streak || 0;
+                if (existing.last_login_date) {
+                    const lastDate = new Date(existing.last_login_date);
+                    const diffDays = Math.floor((now - lastDate) / 86400000);
+                    if (diffDays === 1) streak += 1;
+                    else if (diffDays > 1) streak = 1;
+                    // same day: don't change
+                } else {
+                    streak = 1;
+                }
+
                 await supabase.from('profiles')
-                    .update({ is_online: true })
+                    .update({
+                        is_online: true,
+                        login_streak: streak,
+                        last_login_date: today
+                    })
                     .eq('id', user.id);
+
                 myUsername = existing.username;
+                myProfile = { ...existing, login_streak: streak };
             }
 
             window.addEventListener('beforeunload', async () => {
-                await supabase.from('profiles')
-                    .update({ is_online: false })
-                    .eq('id', currentUser.id);
+                if (!currentUser) return;
+                // Save study time before leaving
+                const me = groupData.find(u => u.id === currentUser.id);
+                if (me?.status === '📚 Учусь' && me.study_started_at) {
+                    const secs = elapsedSeconds(me.study_started_at);
+                    const newTotal = (me.total_study_seconds || 0) + secs;
+                    await supabase.from('profiles')
+                        .update({ is_online: false, study_started_at: null, total_study_seconds: newTotal })
+                        .eq('id', currentUser.id);
+                } else {
+                    await supabase.from('profiles')
+                        .update({ is_online: false })
+                        .eq('id', currentUser.id);
+                }
             });
 
             const avatarUrl = user.user_metadata?.avatar_url;
@@ -608,6 +972,9 @@
             await fetchMessages();
             startLiveTimers();
             subscribeToChat();
+
+            // Check achievements on login
+            setTimeout(() => checkAndAwardAchievements(), 1000);
         }
 
         // ── Google Login ──
@@ -625,9 +992,13 @@
         // ── Logout ──
         window.logout = async () => {
             if (currentUser) {
-                await supabase.from('profiles')
-                    .update({ is_online: false, study_started_at: null })
-                    .eq('id', currentUser.id);
+                const me = groupData.find(u => u.id === currentUser.id);
+                const updates = { is_online: false, study_started_at: null };
+                if (me?.status === '📚 Учусь' && me.study_started_at) {
+                    const secs = elapsedSeconds(me.study_started_at);
+                    updates.total_study_seconds = (me.total_study_seconds || 0) + secs;
+                }
+                await supabase.from('profiles').update(updates).eq('id', currentUser.id);
             }
             await supabase.auth.signOut({ scope: 'local' });
             currentUser = null;
@@ -641,10 +1012,20 @@
         window.changeStatus = async (text, color) => {
             if (!currentUser) return;
             const isStudying = text === '📚 Учусь';
+            const me = groupData.find(u => u.id === currentUser.id);
             const updates = { status: text, color };
 
+            // Save study time when stopping
+            if (!isStudying && me?.status === '📚 Учусь' && me.study_started_at) {
+                const secs = elapsedSeconds(me.study_started_at);
+                updates.total_study_seconds = (me.total_study_seconds || 0) + secs;
+                updates.study_started_at = null;
+                // Recalc score
+                const fakeProfile = { ...me, total_study_seconds: updates.total_study_seconds };
+                updates.score = calcScore(fakeProfile);
+            }
+
             if (isStudying) {
-                const me = groupData.find(u => u.id === currentUser.id);
                 if (!me?.study_started_at) {
                     updates.study_started_at = new Date().toISOString();
                 }
@@ -658,7 +1039,10 @@
                 .eq('id', currentUser.id);
 
             if (error) { console.error(error); alert('Ошибка! Проверьте RLS политики.'); }
-            else await fetchGroup();
+            else {
+                await fetchGroup();
+                setTimeout(() => checkAndAwardAchievements(), 500);
+            }
         };
 
         // ── Save Username ──
@@ -690,21 +1074,94 @@
             setTimeout(() => el.style.opacity = '0', 3000);
         }
 
+        // ── Achievements ──
+        async function checkAndAwardAchievements() {
+            if (!currentUser) return;
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .maybeSingle();
+
+            if (!profile) return;
+            myProfile = profile;
+
+            const currentBadges = profile.badges || [];
+            const newBadges = [];
+
+            for (const ach of ACHIEVEMENTS) {
+                if (!currentBadges.includes(ach.id) && ach.check(profile)) {
+                    newBadges.push(ach.id);
+                }
+            }
+
+            if (newBadges.length > 0) {
+                const allBadges = [...currentBadges, ...newBadges];
+                const newScore = calcScore({ ...profile, badges: allBadges });
+
+                await supabase.from('profiles')
+                    .update({ badges: allBadges, score: newScore })
+                    .eq('id', currentUser.id);
+
+                // Show toasts
+                for (const badgeId of newBadges) {
+                    const ach = ACHIEVEMENTS.find(a => a.id === badgeId);
+                    if (ach) {
+                        showToast(ach.emoji, `Достижение разблокировано!`, `${ach.label} — ${ach.desc}`);
+                        await new Promise(r => setTimeout(r, 600));
+                    }
+                }
+
+                await fetchGroup();
+            }
+
+            renderMyBadges(myProfile.badges || []);
+            updateMyStats(myProfile);
+        }
+
+        function renderMyBadges(earnedIds) {
+            const container = document.getElementById('myBadges');
+            if (!ACHIEVEMENTS.length) return;
+
+            container.innerHTML = ACHIEVEMENTS.map(ach => {
+                const earned = earnedIds.includes(ach.id);
+                return `
+                    <span class="badge ${earned ? ach.cls : 'badge-locked'}" title="${ach.desc}">
+                        ${ach.emoji} ${ach.label}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        function updateMyStats(profile) {
+            if (!profile) return;
+            const hours = Math.floor((profile.total_study_seconds || 0) / 3600);
+            const mins  = Math.floor(((profile.total_study_seconds || 0) % 3600) / 60);
+            document.getElementById('myTotalHours').textContent =
+                hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`;
+            document.getElementById('myMsgCount').textContent = profile.message_count || 0;
+            document.getElementById('myScore').textContent = profile.score || 0;
+        }
+
         // ── Fetch Group ──
         async function fetchGroup() {
             const { data, error } = await supabase
                 .from('profiles')
                 .select('*')
-                .order('username', { ascending: true });
+                .order('score', { ascending: false });
 
             if (error) return console.error(error);
             groupData = data;
-            renderGroup();
 
             const me = data.find(u => u.id === currentUser?.id);
             if (me) {
+                myProfile = me;
                 document.getElementById('profileName').textContent = me.username;
                 myUsername = me.username;
+                updateMyStats(me);
+                renderMyBadges(me.badges || []);
+
                 const myStudyTimeEl = document.getElementById('myStudyTime');
                 if (me.status === '📚 Учусь' && me.study_started_at) {
                     myStudyTimeEl.classList.add('visible');
@@ -712,16 +1169,61 @@
                     myStudyTimeEl.classList.remove('visible');
                 }
             }
+
+            renderLeaderboard(data);
+            renderGroup(data);
         }
 
-        function renderGroup() {
+        // ── Leaderboard ──
+        function renderLeaderboard(data) {
+            const list = document.getElementById('leaderboardList');
+            if (!data.length) {
+                list.innerHTML = '<span style="color:var(--muted)">Нет данных</span>';
+                return;
+            }
+
+            // Sort by score
+            const sorted = [...data].sort((a, b) => (b.score || 0) - (a.score || 0));
+            const maxScore = sorted[0]?.score || 1;
+            const medals = ['🥇', '🥈', '🥉'];
+            const rankColors = ['lb-rank-1', 'lb-rank-2', 'lb-rank-3'];
+
+            list.innerHTML = sorted.map((user, i) => {
+                const rank = i + 1;
+                const isMe = user.id === currentUser?.id;
+                const pct = Math.max(4, Math.round(((user.score || 0) / maxScore) * 100));
+                const medal = rank <= 3 ? medals[i] : '';
+                const rankCls = rank <= 3 ? rankColors[i] : 'lb-rank-n';
+                const studyH = Math.floor((user.total_study_seconds || 0) / 3600);
+                const badges = (user.badges || []).length;
+
+                return `
+                    <div class="leaderboard-item">
+                        <div class="lb-rank ${rankCls}">#${rank}</div>
+                        <div class="lb-medal">${medal}</div>
+                        <div class="lb-info">
+                            <div class="lb-name">
+                                ${escapeHtml(user.username || 'Без имени')}
+                                ${isMe ? '<span class="lb-me-tag">(я)</span>' : ''}
+                            </div>
+                            <div class="lb-sub">${studyH}ч учёбы · ${badges} значков · ${user.message_count || 0} сообщ.</div>
+                            <div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div>
+                        </div>
+                        <div class="lb-score">${user.score || 0}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ── Group ──
+        function renderGroup(data) {
             const list = document.getElementById('groupList');
-            if (!groupData.length) {
+            if (!data || !data.length) {
                 list.innerHTML = '<span style="color:var(--muted)">Нет студентов</span>';
                 return;
             }
 
-            list.innerHTML = groupData.map(user => {
+            list.innerHTML = data.map(user => {
                 const isOnline = user.is_online;
                 const isStudying = user.status === '📚 Учусь' && user.study_started_at;
                 const isMe = user.id === currentUser?.id;
@@ -742,7 +1244,7 @@
                     <div class="user-item">
                         ${dotHtml}
                         <div class="user-info">
-                            <div class="user-name">${user.username || 'Без имени'}${isMe ? ' <span style="color:var(--muted);font-size:11px;font-weight:400">(я)</span>' : ''}</div>
+                            <div class="user-name">${escapeHtml(user.username || 'Без имени')}${isMe ? ' <span style="color:var(--muted);font-size:11px;font-weight:400">(я)</span>' : ''}</div>
                             <div class="user-status" style="color:${user.color || '#6b7a99'}">${user.status || 'Статус не задан'}</div>
                         </div>
                         <div class="user-right">${rightHtml}</div>
@@ -764,9 +1266,13 @@
                     el.textContent = '📚 ' + formatDuration(elapsedSeconds(el.dataset.start));
                 });
             }, 1000);
+
+            // Check achievements every 2 min
+            setInterval(() => checkAndAwardAchievements(), 120000);
         }
 
         // ── CHAT ──
+        let msgCount = 0;
 
         async function fetchMessages() {
             const { data, error } = await supabase
@@ -780,6 +1286,11 @@
                 document.getElementById('chatMessages').innerHTML =
                     `<div class="chat-empty">⚠️ Чат недоступен.<br>Создайте таблицу <b>messages</b> в Supabase.</div>`;
                 return;
+            }
+
+            // Count my messages
+            if (currentUser) {
+                msgCount = (data || []).filter(m => m.user_id === currentUser.id).length;
             }
 
             renderMessages(data);
@@ -845,17 +1356,31 @@
             btn.disabled = true;
             input.value = '';
 
-            const { error } = await supabase.from('messages').insert({
-                user_id: currentUser.id,
-                username: myUsername,
-                text: text
-            });
+            // Increment message count
+            const me = groupData.find(u => u.id === currentUser.id);
+            const newMsgCount = (me?.message_count || 0) + 1;
+            const newScore = calcScore({ ...me, message_count: newMsgCount });
+
+            const [msgResult] = await Promise.all([
+                supabase.from('messages').insert({
+                    user_id: currentUser.id,
+                    username: myUsername,
+                    text: text
+                }),
+                supabase.from('profiles').update({
+                    message_count: newMsgCount,
+                    score: newScore
+                }).eq('id', currentUser.id)
+            ]);
 
             btn.disabled = false;
-            if (error) {
-                console.error(error);
+            if (msgResult.error) {
+                console.error(msgResult.error);
                 input.value = text;
                 alert('Ошибка отправки. Проверьте таблицу messages и RLS политики.');
+            } else {
+                msgCount = newMsgCount;
+                setTimeout(() => checkAndAwardAchievements(), 300);
             }
         };
 
