@@ -1551,11 +1551,21 @@
         }
 
         function subscribeToChat() {
-            supabase.channel('public:messages')
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-                    appendMessage(payload.new);
+            supabase
+                .channel('chat-room')
+                .on('postgres_changes', {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'messages'
+                }, payload => {
+                    // Не добавляем своё сообщение повторно — оно уже добавлено локально
+                    if (payload.new.user_id !== currentUser?.id) {
+                        appendMessage(payload.new);
+                    }
                 })
-                .subscribe();
+                .subscribe((status) => {
+                    console.log('Chat subscription status:', status);
+                });
         }
 
         function appendMessage(msg) {
@@ -1581,7 +1591,6 @@
 
             let imageUrl = null;
 
-            // Если выбрана картинка — загружаем в Storage
             if (selectedFile) {
                 try {
                     imageUrl = await uploadImageToStorage(selectedFile);
@@ -1597,25 +1606,33 @@
             const newMsgCount = (me?.message_count || 0) + 1;
             const newScore = calcScore({ ...me, message_count: newMsgCount });
 
-            const [msgResult] = await Promise.all([
-                supabase.from('messages').insert({
-                    user_id: currentUser.id,
-                    username: myUsername,
-                    text: text || null,
-                    image_url: imageUrl          // сохраняем ссылку на картинку
-                }),
-                supabase.from('profiles').update({
-                    message_count: newMsgCount,
-                    score: newScore
-                }).eq('id', currentUser.id)
-            ]);
+            const msgPayload = {
+                user_id: currentUser.id,
+                username: myUsername,
+                text: text || null,
+                image_url: imageUrl
+            };
+
+            const { data: insertedMsg, error: msgError } = await supabase
+                .from('messages')
+                .insert(msgPayload)
+                .select()
+                .single();
+
+            await supabase.from('profiles').update({
+                message_count: newMsgCount,
+                score: newScore
+            }).eq('id', currentUser.id);
 
             btn.disabled = false;
-            if (msgResult.error) {
-                console.error(msgResult.error);
+
+            if (msgError) {
+                console.error('Send error:', msgError);
                 input.value = text;
-                alert('Ошибка отправки. Проверьте таблицу messages и RLS политики.');
+                alert('Ошибка отправки: ' + msgError.message);
             } else {
+                // Добавляем сообщение локально сразу — не ждём реалтайм
+                if (insertedMsg) appendMessage(insertedMsg);
                 setTimeout(() => checkAndAwardAchievements(), 300);
             }
         };
