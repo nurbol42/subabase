@@ -1495,10 +1495,10 @@
 
         // ── CHAT: fetch, render, send ──
         async function fetchMessages() {
-            const { data, error } = await supabase
+            const { data: raw, error } = await supabase
                 .from('messages')
                 .select('*')
-                .order('created_at', { ascending: true })
+                .order('created_at', { ascending: false })
                 .limit(50);
 
             if (error) {
@@ -1507,6 +1507,7 @@
                     `<div class="chat-empty">⚠️ Чат недоступен.<br>Создайте таблицу <b>messages</b> в Supabase.</div>`;
                 return;
             }
+            const data = raw ? raw.reverse() : [];
             renderMessages(data);
         }
 
